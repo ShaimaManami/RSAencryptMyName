@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>RSA Encryption and Decryption Technique</title>
+<meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<h1> Yor full name ....</h1>
+<p>RSA Implemented Using HTML & Javascript</p>
+<p>Shaima Al_sharif</p>
+<hr>
+<table border="1">
+    <tr>
+        <td>1st prime number</td>
+        <td id="p">5</td>
+    </tr>
+    <tr>
+        <td>2nd prime number</td>
+        <td id="q">7</td>
+    </tr>
+    <tr>
+        <td>Enter the message :<br>[A=1,B=2,...]</td>
+        <td id="msg">SHAIMA AL_SHARIF</td>
+    </tr>
+    <tr>
+        <td>Public Key:</td>
+        <td id="publickey"></td>
+    </tr>
+    <tr>
+        <td>Exponent:</td>
+        <td id="exponent"></td>
+    </tr>
+    <tr>
+        <td>Private Key:</td>
+        <td id="privatekey"></td>
+    </tr>
+    <tr>
+        <td>Cipher Text:</td>
+        <td id="ciphertext"></td>
+    </tr>
+    <tr>
+        <td>Plain Text:</td>
+        <td id="plaintext"></td>
+    </tr>
+    <tr>
+        <td><button onclick="RSAEncrypt();">encrypt</button></td>
+        <td><button onclick="RSADecrypt();">decrypt</button></td>
+    </tr>
+    </table>
+
+</body>
+<script type="text/javascript">
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
+    function gcd(a, b) {
+        return (!b) ? a : gcd(b, a%b);
+    };
+
+    function getE(t) {
+        for(e=2; e<t; e++) {
+            if(gcd(e,t) == 1) {
+                return e;
+            }
+        }
+        return NaN;
+    }
+
+    function getD(n, e, t) {
+        for(d=0; d<n; d++){
+            if(((e*d) % t) == 1) {
+                return d;
+            }
+        }
+        return NaN;
+    }
+
+    // Initializing the variables for use in the functions
+    var p, q, n, t, e, d, msg, ciphertext, plaintext, map;
+    p=document.getElementById('p').innerHTML;
+    q=document.getElementById('q').innerHTML;
+    msg=document.getElementById('msg').innerHTML;
+    ciphertext = document.getElementById('ciphertext');
+    plaintext = document.getElementById('plaintext');
+    n = p*q;
+    t = (p-1)*(q-1);
+    e = getE(t);
+    d = getD(n, e, t)
+    charCodes = {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4,
+        "E": 5,
+        "F": 6,
+        "G": 7,
+        "H": 8,
+        "I": 9,
+        "J": 10,
+        "K": 11,
+        "L": 12,
+        "M": 13,
+        "N": 14,
+        "O": 15,
+        "P": 16,
+        "Q": 17,
+        "R": 18,
+        "S": 19,
+        "T": 20,
+        "U": 21,
+        "V": 22,
+        "W": 23,
+        "X": 24,
+        "Y": 25,
+        "Z": 26,
+        " ": 27,
+        ",": 28,
+        ".": 29,
+        "_": 30,
+        "?": 31,
+        "#": 32,
+        "-": 33,
+        "+": 34
+    }
+    document.getElementById('publickey').innerHTML = "(" + e + ", " + n + ")";
+    document.getElementById('exponent').innerHTML = e;
+    document.getElementById('privatekey').innerHTML = "(" + d + ", " + n + ")";
+
+    function RSAEncrypt() {
+        var result = "";
+        for (var i = 0; i < msg.length; i++){
+            var m = charCodes[msg.charAt(i)];
+            var c = Math.pow(m, e) % n;
+            result = result + getKeyByValue(charCodes, c);
+        }
+        ciphertext.innerHTML = result;
+    }
+
+    function RSADecrypt() {
+        var cipher = ciphertext.innerHTML;
+        var result = "";
+        for (var i = 0; i < cipher.length; i++) {
+            var c = charCodes[cipher.charAt(i)];
+            var m = Math.pow(c, d) % n;
+            result = result + getKeyByValue(charCodes, m);
+        }
+        plaintext.innerHTML = result;
+    }
+
+</script>
+</html>
